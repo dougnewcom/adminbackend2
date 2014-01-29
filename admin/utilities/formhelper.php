@@ -57,7 +57,7 @@ class formHelper
 			if(strlen($message) > 0)
 			{
 				//build message
-				$buildMessage = '<tr><td colspan="2" style="background-color : lemonchiffon; border: 1px dashed orange; ">' . $message . '</td></tr>';
+				$buildMessage = '<tr><td colspan="2" style="background-color : #ccc; border: 1px dashed orange;">' . $message . '</td></tr>';
 				return $buildMessage;
 			}
 		
