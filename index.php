@@ -9,10 +9,10 @@ session_start();
 if($_SERVER['HTTP_HOST'] == "localhost"){
 	
 // Set site urls for local based development
-	define('SITE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/adminbackend2');
+	define('SITE_URL', 'http://' . $_SERVER['HTTP_HOST'] . '/adminbackend');
 	$_SESSION['SITE_URL']= SITE_URL;
 	
-	define('SITE_PATH', $_SERVER['DOCUMENT_ROOT'] . '/adminbackend2');
+	define('SITE_PATH', $_SERVER['DOCUMENT_ROOT'] . '/adminbackend');
 	$_SESSION['SITE_PATH'] = SITE_PATH ;
 }
 else{ 

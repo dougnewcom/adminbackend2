@@ -18,7 +18,7 @@ class adminViewHelper
 	public function generateEditLink($rowDetails)
 	{
 		$rootUrl = $_SESSION['SITE_URL'];
-		$editPage = $rootUrl . '/admin/forms/edit.php';
+		$editPage = $rootUrl . '/admin/utilities/edit.php';
 		//set up the base URl
 		$smartUrl = new SmartUrl($editPage);
 		//add a parameter for each column in the lot db

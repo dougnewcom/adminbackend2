@@ -1,15 +1,16 @@
 <?php
 session_start();
 
-require($_SESSION['SITE_PATH'].'/admin/model/userdb.php');
+require($_SESSION['SITE_PATH'].'/admin/model/editdb.php');
 
 /**
- * Will Authenticate submitted credentials from login.php
- */
+ * Will update database values based on entry
+*/
 
 //save all form fields from post variable as key => pairs
-
 $postFields = $_POST['form'][0];
+
+var_dump($postFields); exit;
 
 // call escapePostedData to Sanitize each posted field escape and save to an array
 $escapedPostField = escapePostedData($postFields);
@@ -22,39 +23,39 @@ if($_SESSION['status'] == 'failed')
 {
 	$_SESSION['message'] = "Please Make Corrections on the form";
 	$_SESSION['status'] = null;
-	
+
 	//go back to the form after processing data
 	$callingPage = $_SERVER['HTTP_REFERER'];
 	header('Location: '. $callingPage);
 }else{
-	
+
 	//create an instance of the usermodel and check the db if their exists a user matching username and password submitted
 	$userModel = new Model_UserDb();
 	$username = $escapedPostField['username'];
 	$password = $escapedPostField['password'];
-	
+
 	//check if user authenticates successfully
 	$userAuthentication = $userModel->loginUser($username, $password);
-	
+
 	if($userAuthentication)
 	{
 		//the user authenticates succesfully
 		$userLoggedIn = $userAuthentication['firstname'];
 		$_SESSION['logged_in_user'] = $userLoggedIn;
-		
+
 		//redirect to the administration main page
 		$redirectPage = $_SESSION['SITE_URL'].'/admin/adminview.php';
 		header('Location: '. $redirectPage);
 	}else
 	{
-		//the user authentication failed 	
+		//the user authentication failed
 		$message = 'Username or Password was incorrect. Please try again';
 		$_SESSION['message'] = $message;
-				
+
 		//go back to the form
 		$callingPage = $_SERVER['HTTP_REFERER'];
 		header('Location: '. $callingPage);
-	} 
+	}
 }
 
 
@@ -78,7 +79,7 @@ function escapePostedData($postData)
 	);
 
 	$escapedData = filter_var_array($postData, $filters);
-	
+
 	return $escapedData;
 }
 
@@ -99,8 +100,8 @@ function checkErrors($checkField = array())
 		$_SESSION['status'] = 'failed';
 		$_SESSION['usernameMessage'] = "Please fill in your username";
 	}
-	
-	/*check password Erors*/	
+
+	/*check password Erors*/
 	if(strlen(trim($checkField['password'])) == 0)
 	{
 		$_SESSION['status'] = 'failed';
