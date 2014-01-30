@@ -2,12 +2,12 @@
 
 /*SmartUrl class will make it simple to build URLs in an object oriented way*/
 
-$smartUrl = new SmartUrl('http://localhost/oop/');
-// $smartUrl->addParameters('id','1234');
-$smartUrl->addParameters('dest','www.google.com');
-$smartUrl->addParameters('username','obliviondoug');
+// $smartUrl = new SmartUrl('http://localhost/oop/');
+// // $smartUrl->addParameters('id','1234');
+// $smartUrl->addParameters('dest','www.google.com');
+// $smartUrl->addParameters('username','obliviondoug');
 
-echo $smartUrl->render();
+// echo $smartUrl->render();
 
 class SmartUrl{
 
