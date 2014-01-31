@@ -8,8 +8,7 @@ if(!isset($_SESSION['logged_in_user']))
 	!isset($_SESSION['SITE_URL']) 
 	? $redirectPage = '../index.php'
 	: $redirectPage = $_SESSION['SITE_URL'].'/admin/utilities/login.php'; 
-	
-	
+
 	header('Location: '. $redirectPage);
 }
 else
@@ -32,6 +31,20 @@ $info = $editDbObject->getInfo();
 ?>
 <html>
 <head><title>Admin Backend</title></head>
+
+	<?php 
+		//if error exists display at the top of the admin view
+		if(isset($_SESSION['updateMessage']))
+		{
+			echo '<div style=" margin-left: 10%; height:auto; width:500px; background:red; font-weight:bold; font-size:15px; text-align:center;">';
+			echo  $_SESSION['updateMessage'];
+			echo '</div>';
+		}
+		
+		//unset the session after the message is shown so it does not reoccur on page refresh
+		unset($_SESSION['updateMessage']);
+	?>
+
 <table>
 	<thead>
 		<th>Lot #</th>

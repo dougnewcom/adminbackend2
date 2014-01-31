@@ -10,14 +10,11 @@ require($_SESSION['SITE_PATH'].'/admin/model/editdb.php');
 //save all form fields from post variable as key => pairs
 $postFields = $_POST['form'][0];
 
-var_dump($postFields); exit;
-
 // call escapePostedData to Sanitize each posted field escape and save to an array
 $escapedPostField = escapePostedData($postFields);
 
 //Check for errors : call checkEmptyField that checks all submitted fields if they are empty
 checkErrors($escapedPostField);
-
 
 if($_SESSION['status'] == 'failed')
 {
@@ -29,35 +26,36 @@ if($_SESSION['status'] == 'failed')
 	header('Location: '. $callingPage);
 }else{
 
-	//create an instance of the usermodel and check the db if their exists a user matching username and password submitted
-	$userModel = new Model_UserDb();
-	$username = $escapedPostField['username'];
-	$password = $escapedPostField['password'];
+	//create an instance of the edit model 
+	$editModel = new Model_EditDb();
+	
+	//perform update on the database
+	$updateStatus = $editModel->updateInfo($escapedPostField);
+	
+	//redirect to the administration main page
+	$redirectPage = $_SESSION['SITE_URL'].'/admin/adminview.php';
+	header('Location: '. $redirectPage);
 
-	//check if user authenticates successfully
-	$userAuthentication = $userModel->loginUser($username, $password);
-
-	if($userAuthentication)
+	if($updateStatus)
 	{
-		//the user authenticates succesfully
-		$userLoggedIn = $userAuthentication['firstname'];
-		$_SESSION['logged_in_user'] = $userLoggedIn;
+		//the row was succesfully updated
+		$updatedRow = $escapedPostField['row_id'];
+		$_SESSION['updatedRow'] = $updatedRow;
 
 		//redirect to the administration main page
 		$redirectPage = $_SESSION['SITE_URL'].'/admin/adminview.php';
 		header('Location: '. $redirectPage);
 	}else
 	{
-		//the user authentication failed
-		$message = 'Username or Password was incorrect. Please try again';
-		$_SESSION['message'] = $message;
+		//the update failed
+		$message = 'The Update Process Failed for row #'. $escapedPostField['row_id'] .' Please Try again';
+		$_SESSION['updateMessage'] = $message;
 
 		//go back to the form
-		$callingPage = $_SERVER['HTTP_REFERER'];
-		header('Location: '. $callingPage);
+		$redirectPage = $_SESSION['SITE_URL'].'/admin/adminview.php';
+		header('Location: '. $redirectPage);
 	}
 }
-
 
 /**
  * function: setPostedData
@@ -68,11 +66,19 @@ function escapePostedData($postData)
 	//set filters for each fieldtype
 	$filters = array
 	(
-			"username" => array
+			"lot_size" => array
 			(
 					"filter"=>	"FILTER_SANITIZE_SPECIAL_CHARS"
 			),
-			"password" => array
+			"lot_availability" => array
+			(
+					"filter"=>	"FILTER_SANITIZE_SPECIAL_CHARS"
+			),
+			"lot_price" => array
+			(
+					"filter"=>	"FILTER_SANITIZE_SPECIAL_CHARS"
+			),
+			"row_id" => array
 			(
 					"filter"=>	"FILTER_SANITIZE_SPECIAL_CHARS"
 			)
@@ -95,16 +101,16 @@ function checkErrors($checkField = array())
 {
 	/*check Username Errors*/
 	//check if Username is Empty
-	if(strlen(trim($checkField['username'])) == 0)
+	if(!preg_match('/^[0-9]+(\.[0-9]+)?$/',$checkField['lot_size']))
 	{
 		$_SESSION['status'] = 'failed';
-		$_SESSION['usernameMessage'] = "Please fill in your username";
+		$_SESSION['lot_sizeMessage'] = "Please enter a positive number or decimal for size";
 	}
-
+	
 	/*check password Erors*/
-	if(strlen(trim($checkField['password'])) == 0)
+	if(!preg_match('/^[0-9]+(\.[0-9]+)?$/',$checkField['lot_price']))
 	{
 		$_SESSION['status'] = 'failed';
-		$_SESSION['passwordMessage'] = "Please fill in your Password";
+		$_SESSION['lot_priceMessage'] = "Please enter a positive number or decimal for price";
 	}
 }

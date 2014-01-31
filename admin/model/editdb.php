@@ -57,14 +57,16 @@ class Model_EditDb extends Db_Connect
 										  	  lot_availability = :lot_availability,
 									  		  lot_price = :lot_price
 										  WHERE row_id = :row_id ');
-	
+			
+			$stmt->bindParam(':lot_size', $updateDetails['lot_size']);
+			$stmt->bindParam(':lot_availability', $updateDetails['lot_availability']);
+			$stmt->bindParam(':lot_price', $updateDetails['lot_price']);
+			$stmt->bindParam(':row_id', $updateDetails['row_id']);
+			
 			//execute select query
-			$stmt->execute();
+			$updateResult = $stmt->execute();
 	
-			//get results and save to userInfo variable
-			$lotInfo = $stmt->fetchAll(PDO:: FETCH_ASSOC);
-	
-			return $lotInfo;
+			return $updateResult;
 		}
 		catch(Exception $e)
 		{

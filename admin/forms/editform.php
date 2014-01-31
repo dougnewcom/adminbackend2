@@ -54,7 +54,7 @@ class EditForm extends formHelper
 		}
 		
 		$html .= $this->displayRow('lot_availability',
-								   '<select name="form[0][lot_availablity]">'.
+								   '<select name="form[0][lot_availability]">'.
 								   '<option value="'. $currentState[0] . '">'. $currentState[1] . '</option>'.
 								   '<option value="'. $selectableState[0] . '">'. $selectableState[1] . '</option>');
 			

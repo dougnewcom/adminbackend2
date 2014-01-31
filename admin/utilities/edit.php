@@ -23,7 +23,7 @@ else
 require($_SESSION['SITE_PATH'] .'/admin/forms/editform.php');
 require($_SESSION['SITE_PATH'] .'/admin/model/editdb.php');
 
-//create Login form object
+//create Edit form object
 $editForm = new EditForm();
 
 
