@@ -5,7 +5,11 @@ session_start();
 if(!isset($_SESSION['logged_in_user']))
 {
 	//if the user is not logged in then do not load the current page and redirect to the login page
-	$redirectPage = $_SESSION['SITE_URL'].'/admin/utilities/login.php';
+	!isset($_SESSION['SITE_URL']) 
+	? $redirectPage = '../index.php'
+	: $redirectPage = $_SESSION['SITE_URL'].'/admin/utilities/login.php'; 
+	
+	
 	header('Location: '. $redirectPage);
 }
 else
